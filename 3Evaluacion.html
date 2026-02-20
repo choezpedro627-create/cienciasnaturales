@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test tipo Moodle</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        padding: 30px;
+    }
+
+    #wrapper {
+        display: none;
+        justify-content: center;
+        gap: 20px;
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    #progress-box {
+        width: 150px;
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        height: fit-content;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    #progress-title {
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    #progress-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .prog-item {
+        padding: 10px;
+        background: #dcdcdc;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .prog-current {
+        background: #007bff;
+        color: white;
+    }
+
+    .prog-answered {
+        background: #28a745;
+        color: white;
+    }
+
+    #test-container {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        width: 650px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .question {
+        font-size: 20px;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+    .option {
+        margin-bottom: 10px;
+        padding: 10px;
+        background: #eaeaea;
+        border-radius: 6px;
+        cursor: pointer;
+        display: block;
+        width: 100%;
+    }
+    .option input {
+        margin-right: 10px;
+    }
+    .buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+    button {
+        padding: 10px 20px;
+        border: none;
+        background: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:disabled {
+        background: gray;
+    }
+
+    #progress {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #results {
+        display: none;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    .correct { color: green; font-weight: bold; }
+    .wrong { color: red; font-weight: bold; }
+
+    #continueBtn {
+        margin-top: 20px;
+        padding: 12px;
+        width: 200px;
+        background: #007bff;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    #timer {
+        font-size: 20px;
+        font-weight: bold;
+        color: #d9534f;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    #start-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+    #startBtn {
+        font-size: 20px;
+        padding: 15px 40px;
+        border-radius: 8px;
+    }
+	
+	
+	
+	
+	
+	/* ========= RESPONSIVE ========= */
+
+/* Tablets */
+@media (max-width: 900px) {
+    #wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #test-container {
+        width: 100%;
+        max-width: 650px;
+    }
+
+    #progress-box {
+        width: 100%;
+        max-width: 400px;
+        margin-top: 20px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+
+    .question {
+        font-size: 18px;
+    }
+
+    .option {
+        font-size: 15px;
+        padding: 8px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    #progress-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    #timer {
+        font-size: 18px;
+    }
+}
+
+	
+	/* ====== MEJORA RESPONSIVE PARA CELULARES ====== */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+    }
+
+    #wrapper {
+        gap: 15px;
+    }
+
+    #test-container {
+        width: 100%;
+        padding: 18px;
+    }
+
+    .question {
+        font-size: 20px;
+        line-height: 1.3;
+    }
+
+    .option {
+        font-size: 16px;
+        padding: 14px;
+    }
+
+    .option input {
+        transform: scale(1.3);
+        margin-right: 12px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 18px;
+        padding: 16px;
+        border-radius: 10px;
+    }
+
+    #startBtn {
+        width: 100%;
+        font-size: 22px;
+        padding: 18px;
+    }
+
+    #continueBtn {
+        width: 100%;
+        font-size: 18px;
+        padding: 16px;
+    }
+
+    #progress-box {
+        width: 100%;
+        padding: 15px;
+    }
+
+    #progress-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+    }
+
+    .prog-item {
+        padding: 12px 0;
+        font-size: 14px;
+    }
+
+    #timer {
+        font-size: 18px;
+    }
+}
+
+	
+	
+</style>
+</head>
+<body>
+
+<!-- BOTÓN PARA INICIAR -->
+<div id="start-container">
+    <button id="startBtn" onclick="startExam()">Iniciar Evaluación</button>
+</div>
+
+<!-- TEMPORIZADOR -->
+<div id="timer" style="display:none;">Tiempo restante: 30:00</div>
+
+<div id="wrapper">
+
+    <!-- TEST PRINCIPAL -->
+    <div id="test-container">
+        <div id="progress"></div>
+        <div id="question-box"></div>
+
+        <div class="buttons">
+            <button id="backBtn" onclick="previousQuestion()">Atrás</button>
+            <button id="nextBtn" onclick="nextQuestion()">Siguiente</button>
+        </div>
+    </div>
+
+    <!-- PROGRESO A LA DERECHA -->
+    <div id="progress-box">
+        <div id="progress-title">Progreso</div>
+        <div id="progress-grid"></div>
+    </div>
+
+</div>
+
+<div id="results"></div>
+
+<script>
+localStorage.setItem("temaActual", "1");
+
+const questions = [
+    {q:"¿Qué instrumento permitió a los científicos observar estructuras invisibles al ojo humano?", 
+	options:["a) Telescopio",
+			"b) Microscopio",
+			"c) Lupa simple",
+			"d) Espectroscopio"], answer:1},
+    
+	{q:"¿Quiénes fabricaron el sistema de lentes que lograba mayores aumentos hacia 1600?", 
+	options:["a) Monjes austríacos",
+			"b) Hans y Zacharias Janssen",
+			"c) Robert Hooke",
+			"d) Van Leeuwenhoek"], answer:1},
+    
+	{q:"¿Por qué Robert Hooke eligió el nombre de células en 1655?", 
+	options:["a) Por su forma circular",
+			"b) Por ser unidades básicas",
+			"c) Por su parecido a las celdas de monjes",
+			"d) Por el nombre de su inventor"], answer:2},
+    
+	{q:"¿Qué científico fue el primero en observar bacterias y protozoarios (animáculos)?"
+	, options:["a) Robert Hooke",
+			"b) Anthon van Leeuwenhoek",
+			"c) Zacharias Janssen",
+			"d) Hans Janssen"], answer:1},
+	
+    {q:"¿Qué avance del siglo XIX permitió registrar procesos celulares en movimiento?", 
+	options:["a) El tercer lente para cámaras",
+			"b) El microscopio simple",
+			"c) El microscopio electrónico",
+			"d) Lentes de cristal pulido"], answer:0},
+			
+    {q:"¿Qué tipo de microscopio inventado en el siglo XX permite aumentos de 100 mil veces?", 
+	options:["a) Compuesto",
+			"b) Electrónico",
+			"c) Óptico",
+			"d) Digital"], answer:1},
+			
+    {q:"¿Qué capacidad técnica ofreció el microscopio electrónico por primera vez?", 
+	options:["a) Ver colores reales",
+			"b) Observaciones en tres dimensiones 3D",
+			"c) Observar a simple vista",
+			"d) Ver solo glóbulos rojos"], answer:1},
+    
+	{q:"¿Gracias al análisis de qué fluido se pudieron determinar causas de muchas enfermedades?", 
+	options:["a)  Saliva",
+			"b)   Sangre",
+			"c)   Agua",
+			"d)   Orina"], answer:1},
+    
+	{q:"¿Qué estructuras genéticas observadas hoy son fundamentales para la criminalística?", 
+	options:["a) Cromosomas y ADN",
+			"b) Mitocondrias",
+			"a) Bacterias",
+			"d) Organelos"], answer:0},
+    
+	{q:"¿A qué campo científico aportó el microscopio la observación de reacciones químicas?", 
+	options:["a)  Astronomía",
+			"b)  Bioquímica",
+			"c)  Física",
+			"d) Geología"], answer:1}
+];
+
+let current = 0;
+let userAnswers = new Array(questions.length).fill(null);
+
+let timeLeft = 30 * 60;
+let timerInterval;
+
+/* === INICIAR EVALUACIÓN === */
+function startExam() {
+    document.getElementById("start-container").style.display = "none";
+    document.getElementById("wrapper").style.display = "flex";
+    document.getElementById("timer").style.display = "block";
+
+    loadQuestion();
+    startTimer();
+}
+
+/* === TEMPORIZADOR === */
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timeLeft--;
+
+        let min = Math.floor(timeLeft / 60);
+        let sec = timeLeft % 60;
+        if (sec < 10) sec = "0" + sec;
+
+        document.getElementById("timer").innerText =
+            `Tiempo restante: ${min}:${sec}`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            showResults();
+        }
+    }, 1000);
+}
+
+/* === PROGRESO === */
+function drawProgress() {
+    const grid = document.getElementById("progress-grid");
+    grid.innerHTML = "";
+
+    questions.forEach((q, i) => {
+        let cls = "prog-item";
+
+        if (i === current) cls += " prog-current";
+        else if (userAnswers[i] !== null) cls += " prog-answered";
+
+        grid.innerHTML += `<div class="${cls}">${i + 1}</div>`;
+    });
+}
+
+function loadQuestion() {
+    drawProgress();
+
+    document.getElementById("progress").innerText =
+        `Pregunta ${current + 1} de ${questions.length}`;
+
+    const q = questions[current];
+
+    let html = `<div class="question">${q.q}</div>`;
+
+    q.options.forEach((opt, i) => {
+        const checked = userAnswers[current] === i ? "checked" : "";
+        html += `
+        <label class="option">
+            <input type="radio" name="option" value="${i}" ${checked}>
+            ${opt}
+        </label>`;
+    });
+
+    document.getElementById("question-box").innerHTML = html;
+
+    document.getElementById("backBtn").disabled = current === 0;
+    document.getElementById("nextBtn").innerText =
+        current === questions.length - 1 ? "Finalizar" : "Siguiente";
+}
+
+function saveAnswer() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (selected) userAnswers[current] = parseInt(selected.value);
+}
+
+function nextQuestion() {
+    saveAnswer();
+    if (current < questions.length - 1) {
+        current++;
+        loadQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function previousQuestion() {
+    saveAnswer();
+    if (current > 0) {
+        current--;
+        loadQuestion();
+    }
+}
+
+function showResults() {
+    clearInterval(timerInterval);
+
+    document.getElementById("wrapper").style.display = "none";
+    document.getElementById("timer").style.display = "none";
+
+    let correctas = 0;
+    let html = `<h2>Resultados del Test</h2>`;
+
+    questions.forEach((q, i) => {
+        const user = userAnswers[i];
+        const correct = q.answer;
+
+        if (user === correct) correctas++;
+
+        html += `<p><strong>${i+1}. ${q.q}</strong><br>`;
+
+        if (user === correct) {
+            html += `<span class="correct">✔ Correcto: ${q.options[correct]}</span>`;
+        } else {
+            html += `<span class="wrong">✘ Incorrecto</span><br>`;
+            html += `Tu respuesta: ${user !== null ? q.options[user] : "Sin responder"}<br>`;
+            html += `Correcta: <span class="correct">${q.options[correct]}</span>`;
+        }
+
+        html += `</p><hr>`;
+    });
+
+    /* === AÑADIDO POR TU SOLICITUD === */
+    localStorage.setItem("evaluacionPuntos", correctas);
+
+    html += `
+        <h2>Puntaje final</h2>
+        <p><strong>Correctas: ${correctas} de ${questions.length}</strong></p>
+        <p>Tu nota es: <strong>${correctas}</strong></p>
+
+       
+	   <button id="continueBtn" onclick="finalizarTemaActual()" onclick="desbloquear()">
+		Continuar
+		</button>`;
+
+    document.getElementById("results").innerHTML = html;
+    document.getElementById("results").style.display = "block";
+}
+
+
+function finalizarTemaActual() {
+    let temaActual = localStorage.getItem("temaActual");
+    if (!temaActual) temaActual = "1";
+
+    // Marcar tema finalizado
+    localStorage.setItem("tema" + temaActual + "Finalizado", "1");
+
+    // Marcar evaluación como realizada y bloquearla
+    localStorage.setItem("evaluacion3Realizado", "1");
+    localStorage.setItem("evaluacion3", "0");
+
+
+
+    localStorage.setItem("tema4", "1");
+    alert("Tema 4 desbloqueada ✔");
+
+
+    // Volver al índice
+    window.location.href = "index.html";
+}
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

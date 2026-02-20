@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test tipo Moodle</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        padding: 30px;
+    }
+
+    #wrapper {
+        display: none;
+        justify-content: center;
+        gap: 20px;
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    #progress-box {
+        width: 150px;
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        height: fit-content;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    #progress-title {
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    #progress-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .prog-item {
+        padding: 10px;
+        background: #dcdcdc;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .prog-current {
+        background: #007bff;
+        color: white;
+    }
+
+    .prog-answered {
+        background: #28a745;
+        color: white;
+    }
+
+    #test-container {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        width: 650px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .question {
+        font-size: 20px;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+    .option {
+        margin-bottom: 10px;
+        padding: 10px;
+        background: #eaeaea;
+        border-radius: 6px;
+        cursor: pointer;
+        display: block;
+        width: 100%;
+    }
+    .option input {
+        margin-right: 10px;
+    }
+    .buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+    button {
+        padding: 10px 20px;
+        border: none;
+        background: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:disabled {
+        background: gray;
+    }
+
+    #progress {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #results {
+        display: none;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    .correct { color: green; font-weight: bold; }
+    .wrong { color: red; font-weight: bold; }
+
+    #continueBtn {
+        margin-top: 20px;
+        padding: 12px;
+        width: 200px;
+        background: #007bff;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    #timer {
+        font-size: 20px;
+        font-weight: bold;
+        color: #d9534f;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    #start-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+    #startBtn {
+        font-size: 20px;
+        padding: 15px 40px;
+        border-radius: 8px;
+    }
+	
+	
+	
+	
+	
+	/* ========= RESPONSIVE ========= */
+
+/* Tablets */
+@media (max-width: 900px) {
+    #wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #test-container {
+        width: 100%;
+        max-width: 650px;
+    }
+
+    #progress-box {
+        width: 100%;
+        max-width: 400px;
+        margin-top: 20px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+
+    .question {
+        font-size: 18px;
+    }
+
+    .option {
+        font-size: 15px;
+        padding: 8px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    #progress-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    #timer {
+        font-size: 18px;
+    }
+}
+
+	
+	/* ====== MEJORA RESPONSIVE PARA CELULARES ====== */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+    }
+
+    #wrapper {
+        gap: 15px;
+    }
+
+    #test-container {
+        width: 100%;
+        padding: 18px;
+    }
+
+    .question {
+        font-size: 20px;
+        line-height: 1.3;
+    }
+
+    .option {
+        font-size: 16px;
+        padding: 14px;
+    }
+
+    .option input {
+        transform: scale(1.3);
+        margin-right: 12px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 18px;
+        padding: 16px;
+        border-radius: 10px;
+    }
+
+    #startBtn {
+        width: 100%;
+        font-size: 22px;
+        padding: 18px;
+    }
+
+    #continueBtn {
+        width: 100%;
+        font-size: 18px;
+        padding: 16px;
+    }
+
+    #progress-box {
+        width: 100%;
+        padding: 15px;
+    }
+
+    #progress-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+    }
+
+    .prog-item {
+        padding: 12px 0;
+        font-size: 14px;
+    }
+
+    #timer {
+        font-size: 18px;
+    }
+}
+
+	
+	
+</style>
+</head>
+<body>
+
+<!-- BOTÓN PARA INICIAR -->
+<div id="start-container">
+    <button id="startBtn" onclick="startExam()">Iniciar Evaluación</button>
+</div>
+
+<!-- TEMPORIZADOR -->
+<div id="timer" style="display:none;">Tiempo restante: 30:00</div>
+
+<div id="wrapper">
+
+    <!-- TEST PRINCIPAL -->
+    <div id="test-container">
+        <div id="progress"></div>
+        <div id="question-box"></div>
+
+        <div class="buttons">
+            <button id="backBtn" onclick="previousQuestion()">Atrás</button>
+            <button id="nextBtn" onclick="nextQuestion()">Siguiente</button>
+        </div>
+    </div>
+
+    <!-- PROGRESO A LA DERECHA -->
+    <div id="progress-box">
+        <div id="progress-title">Progreso</div>
+        <div id="progress-grid"></div>
+    </div>
+
+</div>
+
+<div id="results"></div>
+
+<script>
+localStorage.setItem("temaActual", "1");
+
+const questions = [
+    {q:"¿Qué nivel agrupa a individuos de una misma especie que pueden reproducirse entre sí?", 
+	options:["a) Comunidad",
+			"b) Población",
+			"c) Ecosistema",
+			"d) Biosfera"], answer:1},
+    
+	{q:"¿Cómo se llaman los organismos cuya única célula realiza todas las funciones vitales?", 
+	options:["a) Pluricelulares",
+			"b) Unicelulares",
+			"c) Tejidos",
+			"d) Sistemas"], answer:1},
+    
+	{q:"¿Cuál es la unidad básica, estructural y funcional de los seres vivos?", 
+	options:["a) Átomo",
+			"b) Molécula",
+			"c) Célula",
+			"d) Órgano "], answer:2},
+    
+	{q:"¿Qué nivel forman órganos como el estómago y el hígado al trabajar coordinados?"
+	, options:["a) Tejido",
+			"b) Sistema",
+			"c) Población",
+			"d) Molécula"], answer:1},
+	
+    {q:"¿Qué unidad abiótica está compuesta por electrones, protones y neutrones?", 
+	options:["a) Átomo",
+			"b) Tejido",
+			"c) Célula",
+			"d) Organelo"], answer:0},
+			
+    {q:"¿Qué nivel incluye a los seres vivos y su relación con los factores abióticos?", 
+	options:["a) Individuo",
+			"b) Ecosistema",
+			"c) Comunidad",
+			"d) Población"], answer:1},
+			
+    {q:"¿Cómo se llaman las estructuras formadas por la unión de células especializadas?", 
+	options:["a) Órganos",
+			"b) Tejidos",
+			"c) Sistemas",
+			"d) Átomos"], answer:1},
+    
+	{q:"¿Cuál es el nivel de organización más complejo y grande de nuestro planeta?", 
+	options:["a)  ",
+			"b)   ",
+			"c)   ",
+			"d)   "], answer:1},
+    
+	{q:"¿Cuál es el nivel de organización más complejo y grande de nuestro planeta?", 
+	options:["a) Población",
+			"b) Biosfera",
+			"a) Ecosistema",
+			"d) Comunidad"], answer:0},
+    
+	{q:"¿Qué nombre reciben las características nuevas que surgen en un nivel superior?", 
+	options:["a) Redes tróficas",
+			"b) Propiedades emergentes",
+			"c) Factores bióticos",
+			"d) Evolución"], answer:1}
+];
+
+let current = 0;
+let userAnswers = new Array(questions.length).fill(null);
+
+let timeLeft = 30 * 60;
+let timerInterval;
+
+/* === INICIAR EVALUACIÓN === */
+function startExam() {
+    document.getElementById("start-container").style.display = "none";
+    document.getElementById("wrapper").style.display = "flex";
+    document.getElementById("timer").style.display = "block";
+
+    loadQuestion();
+    startTimer();
+}
+
+/* === TEMPORIZADOR === */
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timeLeft--;
+
+        let min = Math.floor(timeLeft / 60);
+        let sec = timeLeft % 60;
+        if (sec < 10) sec = "0" + sec;
+
+        document.getElementById("timer").innerText =
+            `Tiempo restante: ${min}:${sec}`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            showResults();
+        }
+    }, 1000);
+}
+
+/* === PROGRESO === */
+function drawProgress() {
+    const grid = document.getElementById("progress-grid");
+    grid.innerHTML = "";
+
+    questions.forEach((q, i) => {
+        let cls = "prog-item";
+
+        if (i === current) cls += " prog-current";
+        else if (userAnswers[i] !== null) cls += " prog-answered";
+
+        grid.innerHTML += `<div class="${cls}">${i + 1}</div>`;
+    });
+}
+
+function loadQuestion() {
+    drawProgress();
+
+    document.getElementById("progress").innerText =
+        `Pregunta ${current + 1} de ${questions.length}`;
+
+    const q = questions[current];
+
+    let html = `<div class="question">${q.q}</div>`;
+
+    q.options.forEach((opt, i) => {
+        const checked = userAnswers[current] === i ? "checked" : "";
+        html += `
+        <label class="option">
+            <input type="radio" name="option" value="${i}" ${checked}>
+            ${opt}
+        </label>`;
+    });
+
+    document.getElementById("question-box").innerHTML = html;
+
+    document.getElementById("backBtn").disabled = current === 0;
+    document.getElementById("nextBtn").innerText =
+        current === questions.length - 1 ? "Finalizar" : "Siguiente";
+}
+
+function saveAnswer() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (selected) userAnswers[current] = parseInt(selected.value);
+}
+
+function nextQuestion() {
+    saveAnswer();
+    if (current < questions.length - 1) {
+        current++;
+        loadQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function previousQuestion() {
+    saveAnswer();
+    if (current > 0) {
+        current--;
+        loadQuestion();
+    }
+}
+
+function showResults() {
+    clearInterval(timerInterval);
+
+    document.getElementById("wrapper").style.display = "none";
+    document.getElementById("timer").style.display = "none";
+
+    let correctas = 0;
+    let html = `<h2>Resultados del Test</h2>`;
+
+    questions.forEach((q, i) => {
+        const user = userAnswers[i];
+        const correct = q.answer;
+
+        if (user === correct) correctas++;
+
+        html += `<p><strong>${i+1}. ${q.q}</strong><br>`;
+
+        if (user === correct) {
+            html += `<span class="correct">✔ Correcto: ${q.options[correct]}</span>`;
+        } else {
+            html += `<span class="wrong">✘ Incorrecto</span><br>`;
+            html += `Tu respuesta: ${user !== null ? q.options[user] : "Sin responder"}<br>`;
+            html += `Correcta: <span class="correct">${q.options[correct]}</span>`;
+        }
+
+        html += `</p><hr>`;
+    });
+
+    /* === AÑADIDO POR TU SOLICITUD === */
+    localStorage.setItem("evaluacionPuntos", correctas);
+
+    html += `
+        <h2>Puntaje final</h2>
+        <p><strong>Correctas: ${correctas} de ${questions.length}</strong></p>
+        <p>Tu nota es: <strong>${correctas}</strong></p>
+
+       
+	   <button id="continueBtn" onclick="finalizarTemaActual()" onclick="desbloquear()">
+		Continuar
+		</button>`;
+
+    document.getElementById("results").innerHTML = html;
+    document.getElementById("results").style.display = "block";
+}
+
+
+function finalizarTemaActual() {
+    let temaActual = localStorage.getItem("temaActual");
+    if (!temaActual) temaActual = "1";
+
+    // Marcar tema finalizado
+    localStorage.setItem("tema" + temaActual + "Finalizado", "1");
+
+    // Marcar evaluación como realizada y bloquearla
+    localStorage.setItem("evaluacion2Realizado", "1");
+    localStorage.setItem("evaluacion2", "0");
+
+
+
+    localStorage.setItem("tema3", "1");
+    alert("Tema 3 desbloqueada ✔");
+
+
+    // Volver al índice
+    window.location.href = "index.html";
+}
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

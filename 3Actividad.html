@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego de Naves</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+font-family:Arial;
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+height:100vh;
+}
+
+#info{
+font-size:20px;
+margin:5px;
+}
+
+#gameContainer{
+width:100%;
+height:70vh;
+max-width:800px;
+position:relative;
+}
+
+canvas{
+width:100%;
+height:100%;
+background:black;
+border:2px solid white;
+}
+
+.btnStart{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:24px;
+padding:15px 30px;
+background:black;
+color:white;
+border:3px solid white;
+border-radius:10px;
+cursor:pointer;
+z-index:10;
+}
+
+.mensajeVictoria{
+position:absolute;
+bottom:10px;
+width:100%;
+text-align:center;
+font-size:28px;
+color:lime;
+font-weight:bold;
+display:none;
+z-index:30;
+}
+
+.btnContinuar{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:28px;
+padding:15px 40px;
+background:lime;
+color:black;
+border:none;
+border-radius:10px;
+cursor:pointer;
+display:none;
+z-index:30;
+}
+
+.pantallaPregunta{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.95);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:20;
+}
+
+.cajaPregunta{
+background:black;
+border:3px solid white;
+padding:20px;
+width:80%;
+max-width:400px;
+text-align:center;
+}
+
+.respuestaBtn{
+display:block;
+width:100%;
+margin:10px 0;
+padding:10px;
+font-size:18px;
+cursor:pointer;
+}
+
+#controles{
+width:100%;
+max-width:800px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+}
+
+button{
+font-size:18px;
+padding:10px 20px;
+}
+/* ===== RESPONSIVE GLOBAL ===== */
+
+*{
+box-sizing:border-box;
+}
+
+html, body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+/* CONTENEDOR PRINCIPAL */
+#gameContainer{
+width:100%;
+height:70vh;
+max-width:100vw;
+max-height:80vh;
+}
+
+/* CANVAS RESPONSIVO REAL */
+canvas{
+display:block;
+width:100%;
+height:100%;
+}
+
+/* CONTROLES RESPONSIVOS */
+#controles{
+width:100%;
+max-width:800px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+gap:10px;
+flex-wrap:nowrap;
+}
+
+/* BOTONES RESPONSIVOS */
+button{
+touch-action:manipulation;
+}
+
+/* TEXTO RESPONSIVO */
+#info{
+font-size:clamp(14px,3vw,22px);
+}
+
+/* BOTONES GRANDES EN MOVIL */
+@media (max-width:768px){
+
+.btnStart{
+font-size:5vw;
+padding:3vw 6vw;
+}
+
+.btnContinuar{
+font-size:5vw;
+padding:3vw 6vw;
+}
+
+.respuestaBtn{
+font-size:4vw;
+padding:3vw;
+}
+
+button{
+font-size:4vw;
+padding:3vw 4vw;
+}
+
+}
+
+/* PANTALLAS MUY PEQUEÑAS */
+@media (max-width:480px){
+
+#gameContainer{
+height:60vh;
+}
+
+}
+
+/* PANTALLAS GRANDES */
+@media (min-width:1200px){
+
+#gameContainer{
+height:800px;
+}
+
+}
+</style>
+</head>
+<body>
+
+<div id="info">
+Vidas: <span id="vidas">5</span>
+</div>
+
+<div id="gameContainer">
+
+<canvas id="gameCanvas"></canvas>
+
+<button id="btnStart" class="btnStart">
+INICIAR JUEGO
+</button>
+
+<div id="mensajeVictoria" class="mensajeVictoria">
+FELICIDADES LO LOGRASTE
+</div>
+
+<button id="btnContinuar" class="btnContinuar" onclick="continuarJuego()">
+CONTINUAR
+</button>
+
+<div id="pantallaPregunta" class="pantallaPregunta">
+
+<div class="cajaPregunta">
+
+<div id="textoPregunta"></div>
+
+<button class="respuestaBtn" onclick="responder(0)" id="r0"></button>
+<button class="respuestaBtn" onclick="responder(1)" id="r1"></button>
+<button class="respuestaBtn" onclick="responder(2)" id="r2"></button>
+
+</div>
+</div>
+</div>
+
+<div id="controles">
+
+<button id="btnDisparar">DISPARAR</button>
+
+<div>
+<button id="btnIzquierda">⬅</button>
+<button id="btnDerecha">➡</button>
+</div>
+
+</div>
+
+<script>
+
+// CANVAS
+
+const canvas=document.getElementById("gameCanvas");
+const ctx=canvas.getContext("2d");
+
+function resizeCanvas(){
+canvas.width=canvas.offsetWidth;
+canvas.height=canvas.offsetHeight;
+
+escalarJuego();
+posicionarJugador();
+
+}
+window.addEventListener("resize",resizeCanvas);
+
+/* ===== ESCALA RESPONSIVA REAL DEL JUEGO ===== */
+
+function escalarJuego(){
+
+let escalaX = canvas.width / 800;
+let escalaY = canvas.height / 600;
+
+let escala = Math.min(escalaX, escalaY);
+
+jugador.width = 50 * escala;
+jugador.height = 50 * escala;
+jugador.speed = 6 * escala;
+
+velocidadEnemigos = 0.5 * escala;
+
+enemigos.forEach(e=>{
+e.width = 40 * escala;
+e.height = 40 * escala;
+});
+
+balasJugador.forEach(b=>{
+b.width = 4 * escala;
+b.height = 15 * escala;
+b.speed = 8 * escala;
+});
+
+balasEnemigos.forEach(b=>{
+b.width = 4 * escala;
+b.height = 15 * escala;
+b.speed = 4 * escala;
+});
+
+}
+
+// IMAGENES
+
+const imgJugador=new Image();
+imgJugador.src="images/jugador.png";
+
+const imgEnemigo=new Image();
+imgEnemigo.src="images/enemigo.png";
+
+// SONIDOS (AGREGADO)
+
+const sonidoDisparo = new Audio("images/disparo.mp3");
+const sonidoGameOver = new Audio("images/gameover.mp3");
+const sonidoPierdeVida = new Audio("images/pierdevida.mp3");
+
+// VARIABLES
+
+let vidas=5;
+let juegoIniciado=false;
+let juegoPausado=false;
+let gameOver=false;
+let victoria=false;
+
+let izquierda=false;
+let derecha=false;
+
+let balasJugador=[];
+let balasEnemigos=[];
+
+let direccion=1;
+let velocidadEnemigos=0.5;
+
+const vidasSpan=document.getElementById("vidas");
+const btnStart=document.getElementById("btnStart");
+
+const mensajeVictoria=document.getElementById("mensajeVictoria");
+const btnContinuar=document.getElementById("btnContinuar");
+
+
+// JUGADOR
+
+const jugador={
+width:50,
+height:50,
+x:0,
+y:0,
+speed:6
+};
+
+// EFECTO IMPACTO (AGREGADO)
+let tiempoImpacto = 0;
+
+function posicionarJugador(){
+jugador.x=canvas.width/2-jugador.width/2;
+jugador.y=canvas.height-jugador.height-10;
+}
+
+
+// ENEMIGOS
+
+let enemigos=[];
+const filas=4;
+const columnas=12;
+
+function crearEnemigos(){
+
+enemigos=[];
+
+let espacio=canvas.width/(columnas+1);
+let escalaVertical = canvas.height / 600;
+let separacionVertical = 50 * escalaVertical;
+let margenSuperior = 40 * escalaVertical;
+
+for(let f=0;f<filas;f++){
+for(let c=0;c<columnas;c++){
+
+enemigos.push({
+x:espacio+c*espacio,
+y:40+f*50,
+width:40,
+height:40,
+vivo:true
+});
+enemigos[enemigos.length-1].y = margenSuperior + f * separacionVertical;
+}
+}
+}
+
+
+// MOVER ENEMIGOS
+
+function moverEnemigos(){
+
+let cambiar=false;
+
+enemigos.forEach(e=>{
+
+if(!e.vivo)return;
+
+e.x+=velocidadEnemigos*direccion;
+
+if(e.x<0||e.x+e.width>canvas.width)
+cambiar=true;
+
+});
+
+if(cambiar){
+
+direccion*=-1;
+
+enemigos.forEach(e=>e.y+=10);
+let escalaVertical = canvas.height / 600;
+let bajada = 10 * escalaVertical;
+
+enemigos.forEach(e=>{
+e.y -= 10;
+e.y += bajada;
+});
+}
+}
+
+
+// DISPARAR ENEMIGOS
+
+function dispararEnemigo(){
+
+if(!juegoIniciado||juegoPausado||gameOver||victoria)return;
+
+let vivos=enemigos.filter(e=>e.vivo);
+
+if(vivos.length===0)return;
+
+let e=vivos[Math.floor(Math.random()*vivos.length)];
+
+balasEnemigos.push({
+x:e.x+e.width/2,
+y:e.y+e.height,
+width:4,
+height:15,
+speed:4
+});
+}
+
+setInterval(dispararEnemigo,200);
+
+
+// VICTORIA
+
+function verificarVictoria(){
+
+let vivos=enemigos.filter(e=>e.vivo);
+
+if(vivos.length===0 && !victoria){
+
+victoria=true;
+juegoPausado=true;
+
+mensajeVictoria.style.display="block";
+btnContinuar.style.display="block";
+
+}
+}
+
+
+// CONTINUAR
+
+function continuarJuego(){
+
+let score=localStorage.getItem("insigniaScore");
+
+if(score==null)score=0;
+
+score=parseInt(score)+10;
+
+localStorage.setItem("insigniaScore",score);
+
+
+// ✅ MARCAR ACTIVIDAD 3 COMO REALIZADA
+localStorage.setItem("actividad3Realizado", "1");
+
+
+window.location.href="index.html";
+
+}
+
+
+
+// PREGUNTAS
+
+const preguntas=[
+{pregunta:"¿Quién acuñó el término célula al observar el corcho?",respuestas:["Robert Hooke","van Leeuwenhoek","Rudolf Virchow"],correcta:0},
+{pregunta:"¿Cuál es la unidad básica, funcional y de origen de todos los seres vivos?",respuestas:["El tejido","El átomo","La célula"],correcta:2},
+{pregunta:"¿Qué científico fue el primero en observar bacterias y glóbulos rojos?",respuestas:["Mathias Schleiden","Leeuwenhoek","Robert Hooke"],correcta:1},
+{pregunta:"¿Qué microscopio permite aumentos de hasta 100 mil veces y visión en 3D?",respuestas:["Simple","Electrónico","Compuesto"],correcta:1},
+{pregunta:"¿Qué postulado de la teoría celular establece: que toda célula proviene de otra preexistente?",respuestas:["Unidad de origen","Unidad estructural","Unidad funcional"],correcta:0},
+{pregunta:"¿A qué nivel pertenecen las poblaciones y los ecosistemas según el texto?",respuestas:["Especialización celular","Niveles químicos","Niveles de organización de la materia"],correcta:2},
+{pregunta:"¿Qué científicos alemanes establecieron la Teoría Celular en el siglo XIX?",respuestas:["Watson, Crick y Franklin","Hooke, Janssen y Leeuwenhoek","Schleiden, Schwann y Virchow"],correcta:2}
+
+];
+
+let preguntaActual=null;
+
+const pantallaPregunta=document.getElementById("pantallaPregunta");
+const textoPregunta=document.getElementById("textoPregunta");
+
+function mostrarPregunta(){
+
+juegoPausado=true;
+
+pantallaPregunta.style.display="flex";
+
+preguntaActual=preguntas[Math.floor(Math.random()*preguntas.length)];
+
+textoPregunta.textContent=preguntaActual.pregunta;
+
+r0.textContent=preguntaActual.respuestas[0];
+r1.textContent=preguntaActual.respuestas[1];
+r2.textContent=preguntaActual.respuestas[2];
+
+}
+
+function responder(i){
+
+pantallaPregunta.style.display="none";
+
+if(i!==preguntaActual.correcta){
+
+vidas--;
+vidasSpan.textContent=vidas;
+// ACTIVAR EFECTO IMPACTO
+tiempoImpacto = 15;
+
+// 🔊 SONIDO PERDER VIDA (AGREGADO)
+sonidoPierdeVida.currentTime = 0;
+sonidoPierdeVida.play();
+
+if(vidas<=0){
+
+gameOver=true;
+juegoIniciado=false;
+
+// 🔊 SONIDO GAME OVER (AGREGADO)
+sonidoGameOver.currentTime = 0;
+sonidoGameOver.play();
+
+btnStart.style.display="block";
+btnStart.textContent="REINICIAR";
+
+}
+}
+
+juegoPausado=false;
+
+}
+
+
+// DISPARAR JUGADOR
+
+function dispararJugador(){
+
+if(!juegoIniciado||juegoPausado||gameOver)return;
+
+balasJugador.push({
+x:jugador.x+jugador.width/2,
+y:jugador.y,
+width:4,
+height:15,
+speed:8
+});
+// 🔊 SONIDO DISPARO (AGREGADO)
+sonidoDisparo.currentTime = 0;
+sonidoDisparo.play();
+}
+
+
+// CONTROLES
+
+document.addEventListener("keydown",e=>{
+
+if(e.code==="ArrowLeft")izquierda=true;
+if(e.code==="ArrowRight")derecha=true;
+if(e.code==="Space")dispararJugador();
+
+});
+
+document.addEventListener("keyup",e=>{
+
+if(e.code==="ArrowLeft")izquierda=false;
+if(e.code==="ArrowRight")derecha=false;
+
+});
+
+btnDisparar.onclick=dispararJugador;
+btnIzquierda.addEventListener("touchstart",()=>izquierda=true);
+btnIzquierda.addEventListener("touchend",()=>izquierda=false);
+
+btnDerecha.addEventListener("touchstart",()=>derecha=true);
+btnDerecha.addEventListener("touchend",()=>derecha=false);
+
+// START
+
+btnStart.onclick=()=>{
+
+vidas=5;
+vidasSpan.textContent=vidas;
+
+balasJugador=[];
+balasEnemigos=[];
+
+gameOver=false;
+victoria=false;
+juegoPausado=false;
+
+mensajeVictoria.style.display="none";
+btnContinuar.style.display="none";
+
+crearEnemigos();
+posicionarJugador();
+
+juegoIniciado=true;
+
+btnStart.style.display="none";
+
+};
+
+
+// ACTUALIZAR
+
+function actualizar(){
+
+if(!juegoIniciado||juegoPausado)return;
+
+
+// mover jugador
+
+if(izquierda && jugador.x>0)
+jugador.x-=jugador.speed;
+
+if(derecha && jugador.x<canvas.width-jugador.width)
+jugador.x+=jugador.speed;
+
+
+// mover enemigos
+
+moverEnemigos();
+
+
+// GAME OVER si enemigo llega abajo
+
+for(let e of enemigos){
+
+if(!e.vivo) continue;
+
+if(e.y+e.height>=canvas.height){
+
+gameOver=true;
+juegoIniciado=false;
+
+// 🔊 SONIDO GAME OVER (AGREGADO)
+sonidoGameOver.currentTime = 0;
+sonidoGameOver.play();
+
+btnStart.style.display="block";
+btnStart.textContent="REINICIAR";
+
+return;
+
+}
+
+}
+
+
+// mover balas jugador
+
+balasJugador.forEach((b,i)=>{
+b.y-=b.speed;
+if(b.y<0)balasJugador.splice(i,1);
+});
+
+
+// mover balas enemigos
+
+balasEnemigos.forEach((b,i)=>{
+b.y+=b.speed;
+if(b.y>canvas.height)balasEnemigos.splice(i,1);
+});
+
+
+// bala enemigo toca jugador
+
+for(let i=balasEnemigos.length-1;i>=0;i--){
+
+let b=balasEnemigos[i];
+
+if(
+b.x<jugador.x+jugador.width &&
+b.x+b.width>jugador.x &&
+b.y<jugador.y+jugador.height &&
+b.y+b.height>jugador.y
+){
+
+balasEnemigos.splice(i,1);
+
+mostrarPregunta();
+
+return;
+
+}
+}
+
+
+// bala jugador toca enemigo
+
+for(let i=balasJugador.length-1;i>=0;i--){
+
+let b=balasJugador[i];
+
+for(let e of enemigos){
+
+if(!e.vivo) continue;
+
+if(
+b.x<e.x+e.width &&
+b.x+b.width>e.x &&
+b.y<e.y+e.height &&
+b.y+b.height>e.y
+){
+
+e.vivo=false;
+
+/* ELIMINAR LA BALA AL IMPACTAR */
+balasJugador.splice(i,1);
+
+verificarVictoria();
+
+break;
+
+}
+
+}
+
+}
+
+}
+
+
+// DIBUJAR
+
+function dibujar(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+if(!juegoIniciado)return;
+
+// EFECTO IMPACTO VISUAL
+if(tiempoImpacto>0){
+
+ctx.globalAlpha = 0.5 + Math.random()*0.5;
+
+// pequeño temblor
+let offsetX = (Math.random()-0.5)*10;
+let offsetY = (Math.random()-0.5)*10;
+
+ctx.drawImage(
+imgJugador,
+jugador.x+offsetX,
+jugador.y+offsetY,
+jugador.width,
+jugador.height
+);
+
+ctx.globalAlpha = 1;
+
+tiempoImpacto--;
+
+}else{
+
+ctx.drawImage(imgJugador,jugador.x,jugador.y,jugador.width,jugador.height);
+
+}
+
+
+enemigos.forEach(e=>{
+if(e.vivo)
+ctx.drawImage(imgEnemigo,e.x,e.y,e.width,e.height);
+});
+
+ctx.fillStyle="yellow";
+balasJugador.forEach(b=>ctx.fillRect(b.x,b.y,b.width,b.height));
+
+ctx.fillStyle="red";
+balasEnemigos.forEach(b=>ctx.fillRect(b.x,b.y,b.width,b.height));
+
+}
+
+
+// LOOP
+
+function loop(){
+
+actualizar();
+dibujar();
+
+requestAnimationFrame(loop);
+
+}
+
+crearEnemigos();
+posicionarJugador();
+resizeCanvas();
+loop();
+/* PREVENIR SCROLL EN MOVIL */
+document.addEventListener("touchmove",function(e){
+e.preventDefault();
+},{passive:false});
+</script>
+
+</body>
+</html>
