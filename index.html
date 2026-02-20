@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P&aacute;gina Gamificada</title>
+
+<style>
+body { margin:0; background:#FFFFFF; color:white; font-family:Arial, sans-serif; }
+
+/* ============================ */
+/*      PANTALLA DE REGISTRO    */
+/* ============================ */
+#startScreen {
+    position:fixed; top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.95);
+    display:flex; justify-content:center; align-items:center;
+    z-index:1000;
+}
+
+#startBox {
+    background:#222; padding:30px;
+    border-radius:15px; text-align:center;
+    width:320px;
+}
+
+#startBox h2 { margin-bottom:20px; }
+
+input, select {
+    width:90%; padding:10px; margin:10px 0;
+    border-radius:8px; border:none; font-size:16px;
+}
+
+button {
+    padding:10px 20px; margin-top:15px;
+    border:none; border-radius:10px;
+    background:#4eae3a; font-weight:bold; cursor:pointer;
+}
+
+#avatarPreview {
+    width:80px; height:80px; border-radius:50%;
+    margin:10px auto; display:none; object-fit:cover;
+    border:2px solid #ffd24c;
+}
+
+/* ============================ */
+/*            HEADER            */
+/* ============================ */
+#header {
+    background:#4eae3a; padding:15px;
+    display:flex; align-items:center; gap:20px;
+    border-bottom:2px solid #444;
+    position:sticky; top:0; z-index:100;
+}
+
+#userBox {
+    display:flex; align-items:center; gap:10px;
+    font-size:30px; font-weight:bold;
+}
+
+#userBox img {
+    width:45px; height:45px;
+    border-radius:50%; border:2px solid #ffd24c;
+    object-fit:cover;
+}
+
+#logoutBtn {
+    padding:5px 10px;
+    border:none; border-radius:8px;
+    color:black; cursor:pointer;
+	
+}
+
+#insigniaBox{
+    display:flex; align-items:center; gap:8px;
+    font-size: 20px;
+	margin-left: auto; 
+}
+
+#insigniaBox img{
+    width:40px;
+}
+
+/* Animación de aumento */
+.score-anim {
+    animation: boom 0.6s ease-out;
+}
+
+@keyframes boom {
+    0% { transform:scale(1); color:white; }
+    40% { transform:scale(1.5); color:#ffd24c; }
+    100% { transform:scale(1); color:white; }
+}
+
+/* ============================ */
+/*   CONTENEDOR 1/
+/* ============================ */
+#foroContainer {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#btnToggleForo { font-size: 30px; color:white; }
+
+/* ============================ */
+/*   CONTENEDOR 2/
+/* ============================ */
+
+#foroContainer2 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent2 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema2 { font-size: 30px; color:white; }
+
+
+/* ============================ */
+/*   CONTENEDOR 3/
+/* ============================ */
+
+#foroContainer3 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent3 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema3 { font-size: 30px; color:white; }
+
+/* ============================ */
+/*   CONTENEDOR 4/
+/* ============================ */
+
+#foroContainer4 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent4 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema4 { font-size: 30px; color:white; }
+
+/* ============================ */
+/*   CONTENEDOR 5/
+/* ============================ */
+
+#foroContainer5 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent5 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema5 { font-size: 30px; color:white; }
+
+/* ============================ */
+/*   CONTENEDOR 6/
+/* ============================ */
+
+#foroContainer6 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent6 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema6 { font-size: 30px; color:white; }
+
+/* ============================ */
+/*   CONTENEDOR 7/
+/* ============================ */
+
+#foroContainer7 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent7 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema7 { font-size: 30px; color:white; }
+
+/* ============================ */
+/*   CONTENEDOR 8/
+/* ============================ */
+
+#foroContainer8 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent8 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema8 { font-size: 30px; color:white; }
+
+/* ============================ */
+/*   CONTENEDOR 9/
+/* ============================ */
+
+#foroContainer9 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent9 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema9 { font-size: 30px; color:white; }
+
+/* ============================ */
+/*   CONTENEDOR 10/
+/* ============================ */
+
+#foroContainer10 {
+    margin:25px; background:#e9f7e5; padding:20px;
+    border-radius:15px; border:2px solid #4eae3a;
+}
+
+#foroContent10 { display:none; }
+
+textarea { width:100%; resize:vertical; }
+
+#tema10 { font-size: 30px; color:white; }
+
+
+
+
+/* ============================ */
+/*   BLOQUEAR Y DESBLOQUEAR     */
+/* ============================ */
+
+
+.deshabilitado {
+    pointer-events: none;   /* bloquea clics */
+    opacity: 0.4;           /* efecto opaco */
+}
+
+
+
+.bloqueado{
+    opacity: 0.4;
+    pointer-events: none;
+    filter: grayscale(100%);
+}
+
+.candado{
+    font-size: 28px;
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+}
+
+.desbloqueado .candado{
+    transform: scale(1.2) rotate(10deg);
+}
+
+
+
+
+
+/* ============================ */
+/*        RESPONSIVE DESIGN     */
+/* ============================ */
+
+/* Tablets y celulares */
+@media (max-width: 768px){
+
+    body{
+        font-size: 16px;
+    }
+
+    #header{
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #userBox{
+        font-size: 22px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    #insigniaBox{
+        font-size: 16px;
+        margin-left: 0;
+    }
+
+    button{
+        font-size: 18px;
+        width: 100%;
+    }
+
+    #foroContainer,
+    #foroContainer2,
+    #foroContainer3,
+    #foroContainer4,
+    #foroContainer5,
+    #foroContainer6,
+    #foroContainer7,
+    #foroContainer8,
+    #foroContainer9,
+    #foroContainer10{
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .card-text{
+        padding: 10px !important;
+    }
+
+    .card-text img{
+        width: 60px;
+    }
+
+    a{
+        font-size: 22px !important;
+        flex-wrap: wrap;
+    }
+
+    .candado{
+        font-size: 22px;
+    }
+
+    textarea{
+        font-size: 16px;
+    }
+}
+
+/* Celulares peque?os */
+@media (max-width: 480px){
+
+    #startBox{
+        width: 90%;
+        padding: 20px;
+    }
+
+    #userBox img{
+        width: 35px;
+        height: 35px;
+    }
+
+    a{
+        font-size: 18px !important;
+    }
+
+    button{
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .card-text img{
+        width: 50px;
+    }
+
+    .candado{
+        font-size: 20px;
+    }
+}
+
+
+
+
+</style>
+</head>
+
+<body>
+
+<!-- ============================ -->
+<!--      PANTALLA DE INICIO      -->
+<!-- ============================ -->
+<div id="startScreen">
+    <div id="startBox">
+        <h2>Registro de Estudiante</h2>
+        <input type="text" id="studentName" placeholder="Nombres y Apellidos">
+        <select id="studentSex">
+            <option value="">Selecciona tu sexo</option>
+            <option value="M">Hombre</option>
+            <option value="F">Mujer</option>
+        </select>
+        <img id="avatarPreview" src="" alt="Avatar">
+        <button id="startBtn">Ingresar</button>
+    </div>
+</div>
+
+<!-- ============================ -->
+<!--             HEADER            -->
+<!-- ============================ -->
+<div id="header">
+
+    <div id="userBox"> <p>
+        <button id="logoutBtn">
+		<img id="userAvatar" src="" alt="Avatar">
+		</button>
+        <span id="userNameDisplay"></span></p>
+    </div>
+
+
+
+
+    <!-- CONTADOR ORIGINAL -->
+    <div id="insigniaBox">
+        <img src="avatars/corona.png">
+        <b>Medallas: <span id="totalScore">0</span></b>
+    </div>
+
+    <!-- NUEVO CONTADOR 1 -->
+    <div id="insigniaBox">
+        <img src="avatars/copa.png">
+        <b>Insignias: <span id="insigniaScore">0</span></b>
+    </div>
+
+    <!-- NUEVO CONTADOR 2 -->
+    <div id="insigniaBox">
+        <img src="avatars/moneda.png">
+        <b>Recompensas: <span id="recompensaScore">0</span></b>
+    </div>
+
+</div>
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 1   -->
+<!-- ============================ -->
+<div id="foroContainer">
+    <button id="btnToggleForo">Tema #1</button> 
+    <div id="foroContent">
+
+        <!-- MENU 1 (SIN CAMBIOS) -->
+		
+		<br>
+		<div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo"  href="1Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 1</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+		<div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="1Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 1</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="1Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 1 🔒 </a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+				
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad1" href="1actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 1 <span class="candado">🔒</span> </a>
+			<span id="estadoActividad1"  style="font-size:22px; font-weight:bold; margin-left:10px;"></span> 
+	        </div>			
+        </div>
+		
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+			<div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-evaluacion.png" width="80">
+            <a id="evaluacion1" href="1Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+            Evaluaci&oacute;n 1 <span class="candado">🔒</span> </a>
+			<span id="estadoEvaluacion1" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>	
+			</div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 2   -->
+<!-- ============================ -->
+
+<div id="foroContainer2">
+    <button id="tema2"> Tema #2 <span class="candado">🔒</span> </button> 
+	<div id="foroContent2">
+	
+	
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="2Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 2</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="2Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 2</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+        <br>
+		
+		
+        <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="2Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 2 🔒</a>
+			<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad2" href="2actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 2 <span class="candado">🔒</span> </a>
+			<span id="estadoActividad2" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion2" href="2Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 2 <span class="candado">🔒</span> </a>
+				<span id="estadoEvaluacion2" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+            </div>
+        </div>
+		
+
+    </div>
+</div>
+
+
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 3   -->
+<!-- ============================ -->
+<div id="foroContainer3">
+    <button id="tema3">Tema #3 <span class="candado">🔒</span> </button> 
+    <div id="foroContent3">
+
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="3Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 3</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="3Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 3</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="3Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 3 🔒</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad3" href="3actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 3 <span class="candado">🔒</span> </a>
+			<span id="estadoActividad3" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion3" href="3Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 3 <span class="candado">🔒</span> </a>
+				<span id="estadoEvaluacion3" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+            </div>
+        </div>
+		
+
+    </div>
+</div>
+
+
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 4   -->
+<!-- ============================ -->
+<div id="foroContainer4">
+    <button id="tema4">Tema #4<span class="candado">🔒</span> </button> 
+    <div id="foroContent4">
+
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="4Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 4</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="4Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 4</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+				
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="4Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 4 🔒</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad4" href="4actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 4 <span class="candado">🔒</span> </a>
+			<span id="estadoActividad1" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion4"  href="1 Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 4 <span class="candado">🔒</span> </a>
+            </div>
+        </div>
+		
+
+    </div>
+</div>
+
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 5   -->
+<!-- ============================ -->
+<div id="foroContainer5">
+    <button id="tema5">Tema #5<span class="candado">🔒</span></button> 
+    <div id="foroContent5">
+
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="5Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 5</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="5Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 5</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+				
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="1 Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 5</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad5" href="5actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 5 <span class="candado">🔒</span> </a>
+			<span id="estadoActividad1" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion5" href="5Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 5 <span class="candado">🔒</span> </a>
+            </div>
+        </div>
+		
+
+    </div>
+</div>
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 6   -->
+<!-- ============================ -->
+<div id="foroContainer6">
+    <button id="tema6">Tema #6<span class="candado">🔒</span></button> 
+    <div id="foroContent6">
+
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="6Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 6</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="6Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 6</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+				
+        <br>
+	     
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="6Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 6 </a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad6" href="6actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 6 <span class="candado">🔒</span> </a>
+			<span id="estadoActividad1" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion6" href="1 Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 6 <span class="candado">🔒</span> </a>
+            </div>
+        </div>
+		
+
+    </div>
+</div>
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 7   -->
+<!-- ============================ -->
+<div id="foroContainer7">
+    <button id="tema7">Tema #7<span class="candado">🔒</span></button> 
+    <div id="foroContent7">
+
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="7Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 7</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="7Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 7</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+				
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="7Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 7 </a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad7" href="7actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 7 <span class="candado">🔒</span> </a>
+			<span id="estadoActividad1" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion7" href="1 Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 7 <span class="candado">🔒</span> </a>
+            </div>
+        </div>
+		
+
+    </div>
+</div>
+
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 8   -->
+<!-- ============================ -->
+<div id="foroContainer8">
+    <button id="tema8">Tema #8<span class="candado">🔒</span></button> 
+    <div id="foroContent8">
+
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="8Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 8</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="8Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 8</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="8Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 8</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad8" href="8actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 8 <span class="candado">🔒</span></a>
+			<span id="estadoActividad1" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion8" href="1 Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 8 <span class="candado">🔒</span></a>
+            </div>
+        </div>
+		
+
+    </div>
+</div>
+
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 9   -->
+<!-- ============================ -->
+<div id="foroContainer9">
+    <button id="tema9">Tema #9<span class="candado">🔒</span></button> 
+    <div id="foroContent9">
+
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="9Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 9</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="9Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 9</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+        <br>
+				
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="9Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 9</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            <a id="actividad9" href="9actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 9 <span class="candado">🔒</span></a>
+			<span id="actividad9" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion9" href="9Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 9 <span class="candado">🔒</span></a>
+            </div>
+        </div>
+	</div>
+</div>
+
+
+
+<!-- ============================ -->
+<!--   CONTENEDOR DESPLEGABLE 10   -->
+<!-- ============================ -->
+<div id="foroContainer10">
+    <button id="tema10">Tema #10<span class="candado">🔒</span></button> 
+    <div id="foroContent10">
+
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/contenido.png" width="80">
+			<a id="linkForo" href="10Contenido.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Contenido 10</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+        
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN-Video.png" width="80">
+			<a id="linkForo" href="10Video.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Video 10</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+        <br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+			<img src="images/BTN- Foro.png" width="80">
+			<a id="linkForo" href="10Foro.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Foro 10</a>
+		<span id="estadoForo" style="font-size:22px; font-weight:bold;"></span>
+		</div>
+        </div>
+        </div>
+		
+		<br>
+		
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="images/BTN-Actividades.png" width="80">
+            
+			<a id="actividad10" href="10actividad.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+			Actividad 10 <span class="candado">🔒</span></a>
+			<span id="estadoActividad1" style="font-size:22px; font-weight:bold; margin-left:10px;"></span>
+	        </div>
+        </div>
+		
+       <br>
+	   
+        <div class="card-text" style="border: 1px solid #4eae3a; border-radius:15px; padding: 15px; background-color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/BTN-evaluacion.png" width="80">
+                <a id="evaluacion10" href="10Evaluacion.html" style="text-decoration: none; color: #4eae3a; font-size: 30px;">
+                Evaluación 10 <span class="candado">🔒</span></a>
+            </div>
+        </div>
+		
+
+    </div>
+</div>
+
+
+
+
+ 
+<!-- ============================ -->
+<!--            SCRIPTS           -->
+<!-- ============================ -->
+<script>
+
+/* -------- Registro -------- */
+const startScreen = document.getElementById("startScreen");
+const studentNameInput = document.getElementById("studentName");
+const studentSexSelect = document.getElementById("studentSex");
+const avatarPreview = document.getElementById("avatarPreview");
+const userAvatar = document.getElementById("userAvatar");
+const userNameDisplay = document.getElementById("userNameDisplay");
+const logoutBtn = document.getElementById("logoutBtn");
+const startBtn = document.getElementById("startBtn");
+
+const avatars = {
+    M: "avatars/hombre.jpg",
+    F: "avatars/mujer.jpg"
+};
+
+studentSexSelect.addEventListener("change", ()=>{
+    const sex = studentSexSelect.value;
+    if(sex){
+        avatarPreview.src = avatars[sex];
+        avatarPreview.style.display="block";
+    } else avatarPreview.style.display="none";
+});
+
+// Iniciar sesión
+function startSession(){
+    const name = studentNameInput.value.trim();
+    const sex = studentSexSelect.value;
+
+    if(!name || !sex){
+        alert("Completa todos los campos.");
+        return;
+    }
+
+    const studentData = {name, sex, avatar:avatars[sex]};
+    localStorage.setItem("studentData", JSON.stringify(studentData));
+    showStudentInfo(studentData);
+    startScreen.style.display = "none";
+}
+
+startBtn.addEventListener('click', startSession);
+
+function showStudentInfo(data){
+    userNameDisplay.textContent = data.name;
+    userAvatar.src = data.avatar;
+}
+
+window.onload = ()=>{
+    const savedData = JSON.parse(localStorage.getItem("studentData"));
+    if(savedData){ showStudentInfo(savedData); startScreen.style.display="none"; }
+
+    // Cargar puntajes
+    document.getElementById("totalScore").innerText = Number(localStorage.getItem("score")) || 0;
+    document.getElementById("insigniaScore").innerText = Number(localStorage.getItem("insigniaScore")) || 0;
+    document.getElementById("recompensaScore").innerText = Number(localStorage.getItem("recompensaScore")) || 0;
+};
+
+/* -------- Borrar Datos de Registro -------- */
+logoutBtn.addEventListener("click", ()=>{
+ if(confirm("¿Desea borrar los datos y los puntajes obtenidos?")){
+    localStorage.removeItem("studentData");
+    localStorage.removeItem("score");
+    localStorage.removeItem("insigniaScore");
+    localStorage.removeItem("recompensaScore");
+	
+	
+	
+  
+   
+   window.addEventListener("load", aplicarBloqueos);
+   
+   location.reload();
+	}	
+});
+
+
+
+
+
+
+
+
+
+
+
+
+/* -------- Boton desplegable tema 1 -------- */
+document.getElementById("btnToggleForo").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+	
+});
+
+/* -------- Boton desplegable tema 2 -------- */
+document.getElementById("tema2").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent2");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+/* -------- Boton desplegable tema 3 -------- */
+document.getElementById("tema3").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent3");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+/* -------- Boton desplegable tema 4 -------- */
+document.getElementById("tema4").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent4");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+/* -------- Boton desplegable tema 5 -------- */
+document.getElementById("tema5").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent5");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+/* -------- Boton desplegable tema 6 -------- */
+document.getElementById("tema6").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent6");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+/* -------- Boton desplegable tema 7 -------- */
+document.getElementById("tema7").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent7");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+/* -------- Boton desplegable tema 8 -------- */
+document.getElementById("tema8").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent8");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+/* -------- Boton desplegable tema 9 -------- */
+document.getElementById("tema9").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent9");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+/* -------- Boton desplegable tema 10 -------- */
+document.getElementById("tema10").addEventListener("click",()=>{
+    const box = document.getElementById("foroContent10");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+
+
+
+
+
+
+
+/* ========================================================= */
+/*          NUEVAS FUNCIONES PARA AUMENTAR CONTADORES         */
+/* ========================================================= */
+
+function animarContador(id){
+    const el = document.getElementById(id);
+    el.classList.add("score-anim");
+    setTimeout(()=> el.classList.remove("score-anim"), 600);
+}
+
+function addMedalla(n = 1){
+    let total = Number(localStorage.getItem("score")) || 0;
+    total += n;
+    localStorage.setItem("score", total);
+    document.getElementById("totalScore").innerText = total;
+    animarContador("totalScore");
+}
+
+function addInsignia(n = 1){
+    let total = Number(localStorage.getItem("insigniaScore")) || 0;
+    total += n;
+    localStorage.setItem("insigniaScore", total);
+    document.getElementById("insigniaScore").innerText = total;
+    animarContador("insigniaScore");
+}
+
+function addRecompensa(n = 1){
+    let total = Number(localStorage.getItem("recompensaScore")) || 0;
+    total += n;
+    localStorage.setItem("recompensaScore", total);
+    document.getElementById("recompensaScore").innerText = total;
+    animarContador("recompensaScore");
+}
+
+
+
+/* -------- Habilitar Actividad 1 si hizo el foro -------- */
+function actualizarActividad1(){
+    const realizado = localStorage.getItem("foro1Realizado") === "1";
+
+    const link = document.querySelector('a[href="pagina2.html"]');
+
+    if(realizado){
+        link.style.pointerEvents = "auto";
+        link.style.opacity = "1";
+    } else {
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+    }
+}
+
+// Detecta si vuelve desde el foro
+window.addEventListener("load", actualizarActividad1);
+window.addEventListener("storage", actualizarActividad1);
+
+
+
+
+
+
+/* ======== BLOQUEAR Tema#1 ======== */
+
+function verificarActividad1(){
+    const hecho = localStorage.getItem("actividad1Completada") === "1";
+
+    const link = document.getElementById("linkActividad1");
+    const estado = document.getElementById("estadoActividad1");
+
+    if(hecho){
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+
+        estado.innerHTML = "�?Realizado";
+        estado.style.color = "red";
+    }
+}
+
+window.addEventListener("load", verificarActividad1);
+
+
+
+
+
+
+
+
+
+
+
+/* --------------------------------------------- */
+/*   SUMAR INSIGNIAS CUANDO VIENE DE ACTIVIDAD 1  */
+/* --------------------------------------------- */
+
+window.addEventListener("load", ()=>{
+
+    let puntos = localStorage.getItem("actividad1Puntos");
+
+    if(puntos){
+
+        // convertir a número
+        puntos = Number(puntos);
+
+        // leer insignias actuales
+        let actuales = Number(localStorage.getItem("insigniaScore")) || 0;
+
+        // sumar
+        let nuevoTotal = actuales + puntos;
+
+        // guardar
+        localStorage.setItem("insigniaScore", nuevoTotal);
+
+        // actualizar interfaz
+        document.getElementById("insigniaScore").innerText = nuevoTotal;
+
+        // animación opcional (ya existente)
+        animarContador("insigniaScore");
+
+        // evitar que se sume otra vez
+        localStorage.removeItem("actividad1Puntos");
+    }
+	// ===== SUMAR PUNTOS DE ACTIVIDAD 2 =====
+
+let puntosAct2 = localStorage.getItem("actividad2_puntos");
+
+if(puntosAct2){
+
+    puntosAct2 = Number(puntosAct2);
+
+    let actuales = Number(localStorage.getItem("insigniaScore")) || 0;
+
+    let nuevoTotal = actuales + puntosAct2;
+
+    localStorage.setItem("insigniaScore", nuevoTotal);
+
+    document.getElementById("insigniaScore").innerText = nuevoTotal;
+
+    animarContador("insigniaScore");
+
+    // Limpiar para evitar doble suma
+    localStorage.removeItem("actividad2_puntos");
+}
+});
+
+
+
+/* ------------------------------------------------------- */
+/*     SUMAR RECOMPENSAS CUANDO VIENE DE LA EVALUACIÓN      */
+/* ------------------------------------------------------- */
+window.addEventListener("load", ()=>{
+
+    let puntosEva = localStorage.getItem("evaluacionPuntos");
+
+    if(puntosEva){
+
+        puntosEva = Number(puntosEva);
+
+        // Leer recompensas actuales
+        let actuales = Number(localStorage.getItem("recompensaScore")) || 0;
+
+        // Sumar la nota obtenida
+        let nuevoTotal = actuales + puntosEva;
+
+        // Guardar
+        localStorage.setItem("recompensaScore", nuevoTotal);
+
+        // Actualizar interfaz
+        document.getElementById("recompensaScore").innerText = nuevoTotal;
+
+        // Animación existente
+        animarContador("recompensaScore");
+
+        // Evitar que se sume otra vez
+        localStorage.removeItem("evaluacionPuntos");
+    }
+});
+
+
+
+// ===== SISTEMA TIPO MOODLE =====
+
+// Lista de elementos bloqueables
+const elementos = [
+    "actividad1",
+    "evaluacion1",
+	"tema2",
+    "actividad2",
+    "evaluacion2",
+	"tema3",
+	"actividad3",
+	"evaluacion3",
+	"tema4",	
+	"actividad4",
+    "evaluacion4",
+	"tema5",	
+	"actividad5",
+    "evaluacion5",
+	"tema6",		
+	"actividad6",
+    "evaluacion6",
+	"tema7",		
+	"actividad7",
+    "evaluacion7",
+	"tema8",		
+	"actividad8",
+    "evaluacion8",
+	"tema9",		
+	"actividad9",
+    "evaluacion9",
+	"tema10",		
+    "actividad10",
+    "evaluacion10"
+];
+
+// Aplicar bloqueo o desbloqueo
+function aplicarBloqueos(){
+    elementos.forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+
+        const desbloqueado = localStorage.getItem(id) === "1";
+
+        if(desbloqueado){
+            el.classList.remove("bloqueado");
+            el.classList.add("desbloqueado");
+            el.querySelector(".candado").textContent = "🔓";
+            el.style.pointerEvents = "auto";
+            el.style.opacity = "1";
+        }else{
+            el.classList.add("bloqueado");
+            el.querySelector(".candado").textContent = "🔒";
+            el.style.pointerEvents = "none";
+        }
+    });
+}
+
+window.addEventListener("load", aplicarBloqueos);
+
+
+
+
+
+
+
+/* ====== BLOQUEAR FORO 1 SI FUE REALIZADO ====== */
+function verificarForo1(){
+    const realizado = localStorage.getItem("foro1Realizado") === "1";
+
+    // enlace Foro 1
+    const links = document.querySelectorAll('a[href="1Foro.html"]');
+
+    links.forEach(link=>{
+        const estado = link.parentElement.querySelector("span");
+
+        if(realizado){
+            link.classList.add("bloqueado");
+            link.style.pointerEvents = "none";
+            link.style.opacity = "0.4";
+			 
+
+            if(estado){
+                estado.innerHTML = "Realizado &#10004;";
+                estado.style.color = "red";
+            }
+        }
+    });
+}
+window.addEventListener("load", verificarForo1);
+
+
+
+
+/* ====== BLOQUEAR ACTIVIDAD 1 SI FUE REALIZADA ====== */
+function verificarActividad1Realizada(){
+    const realizado = localStorage.getItem("actividad1Realizado") === "1";
+
+    const link = document.getElementById("actividad1");
+    const estado = document.getElementById("estadoActividad1");
+
+    if(realizado && link){
+        link.classList.add("bloqueado");
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+localStorage.setItem("actividad1", "0"); // ?? Moodle
+        if(estado){
+            estado.innerHTML = "Realizado &#10004;";
+            estado.style.color = "red";
+        }
+    }
+}
+window.addEventListener("load", verificarActividad1Realizada);
+
+
+
+
+/* ====== BLOQUEAR EVALUACION 1 SI FUE REALIZADA ====== */
+function verificarEvaluacion1(){
+    const hecho = localStorage.getItem("evaluacion1Realizado") === "1";
+
+    const link = document.getElementById("evaluacion1");
+    const estado = document.getElementById("estadoEvaluacion1");
+	
+    if(hecho && link){
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+
+        estado.innerHTML = "Realizado &#10004;";
+        estado.style.color = "red";
+    }
+}
+window.addEventListener("load", verificarEvaluacion1);
+
+
+
+
+/* ====== BLOQUEAR FORO 2 SI FUE REALIZADO ====== */
+
+function verificarForo2(){
+
+    const realizado = localStorage.getItem("foro2Realizado") === "1";
+
+    // enlace Foro 2
+    const links = document.querySelectorAll('a[href="2Foro.html"]');
+
+    links.forEach(link=>{
+
+        const estado = link.parentElement.querySelector("span");
+
+        if(realizado){
+
+            link.classList.add("bloqueado");
+            link.style.pointerEvents = "none";
+            link.style.opacity = "0.4";
+
+            if(estado){
+                estado.innerHTML = "Realizado &#10004;";
+                estado.style.color = "red";
+            }
+
+        }
+
+    });
+
+}
+
+window.addEventListener("load", verificarForo2);
+
+
+
+
+
+
+/* ====== BLOQUEAR ACTIVIDAD 2 SI FUE REALIZADA ====== */
+
+function verificarActividad2Realizada(){
+
+    const realizado = localStorage.getItem("actividad2Realizado") === "1";
+
+    const link = document.getElementById("actividad2");
+    const estado = document.getElementById("estadoActividad2");
+    const evaluacion = document.getElementById("evaluacion2");
+
+    if(realizado && link){
+
+        // Bloquear Actividad 2
+        link.classList.add("bloqueado");
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+
+        if(estado){
+            estado.innerHTML = "Realizado &#10004;";
+            estado.style.color = "red";
+        }
+
+        // Habilitar Evaluaci��n 2
+        if(evaluacion){
+            evaluacion.style.pointerEvents = "auto";
+            evaluacion.style.opacity = "1";
+            evaluacion.classList.remove("bloqueado");
+        }
+    }
+}
+window.addEventListener("load", verificarActividad2Realizada);
+
+
+/* ====== BLOQUEAR EVALUACION 2 SI FUE REALIZADA ====== */
+function verificarEvaluacion2(){
+
+    const hecho = localStorage.getItem("evaluacion2Realizado") === "1";
+
+    const link = document.getElementById("evaluacion2");
+    const estado = document.getElementById("estadoEvaluacion2");
+	
+    if(hecho && link){
+
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+
+        if(estado){
+            estado.innerHTML = "Realizado &#10004;";
+            estado.style.color = "red";
+        }
+    }
+}
+
+window.addEventListener("load", verificarEvaluacion2);
+
+
+
+
+
+/* ====== BLOQUEAR EVALUACION 1 SI FUE REALIZADA ====== */
+
+
+
+
+/* ====== BLOQUEAR EVALUACION 2 SI FUE REALIZADA ====== */
+function verificarEvaluacion2(){
+    const hecho = localStorage.getItem("evaluacion2Realizado") === "1";
+
+    const link = document.getElementById("evaluacion2");
+    const estado = document.getElementById("estadoEvaluacion2");
+	
+    if(hecho && link){
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+		
+        estado.innerHTML = "Realizado &#10004;";
+        estado.style.color = "red";
+    }
+}
+window.addEventListener("load", verificarEvaluacion2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ====== BLOQUEAR FORO 3 SI FUE REALIZADO ====== */
+
+function verificarForo3(){
+
+    const realizado = localStorage.getItem("foro3Realizado") === "1";
+
+    if(!realizado) return;
+
+    const links = document.querySelectorAll('a[href="3Foro.html"]');
+
+    links.forEach(link=>{
+
+        let estado = link.parentElement.querySelector("span");
+
+        if(!estado){
+            estado = link.nextElementSibling;
+        }
+
+        // bloquear enlace
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+        link.classList.add("bloqueado");
+
+        // mostrar realizado en rojo con visto
+        if(estado){
+            estado.innerHTML = "Realizado &#10004;";
+            estado.style.color = "red";
+            estado.style.fontWeight = "bold";
+        }
+
+    });
+
+}
+
+window.addEventListener("load", verificarForo3);
+
+
+
+
+/* ====== BLOQUEAR ACTIVIDAD 3 SI FUE REALIZADA ====== */
+function verificarActividad3Realizada(){
+
+    const realizado = localStorage.getItem("actividad3Realizado") === "1";
+
+    const link = document.getElementById("actividad3");
+    const estado = document.getElementById("estadoActividad3");
+    const evaluacion = document.getElementById("evaluacion3");
+
+    if(realizado && link){
+
+        link.classList.add("bloqueado");
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+
+        if(estado){
+            estado.innerHTML = "Realizado &#10004;";
+            estado.style.color = "red";
+        }
+
+        if(evaluacion){
+            evaluacion.style.pointerEvents = "auto";
+            evaluacion.style.opacity = "1";
+            evaluacion.classList.remove("bloqueado");
+        }
+    }
+}
+
+window.addEventListener("load", verificarActividad3Realizada);
+
+
+/* ====== BLOQUEAR EVALUACION 3 SI FUE REALIZADA ====== */
+function verificarEvaluacion3(){
+    const hecho = localStorage.getItem("evaluacion3Realizado") === "1";
+
+    const link = document.getElementById("evaluacion3");
+    const estado = document.getElementById("estadoEvaluacion3");
+	
+    if(hecho && link){
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+		
+        estado.innerHTML = "Realizado &#10004;";
+        estado.style.color = "red";
+    }
+}
+window.addEventListener("load", verificarEvaluacion3);
+
+
+
+
+/* ====== BLOQUEAR FORO 4 SI FUE REALIZADO ====== */
+
+function verificarForo4(){
+
+    const realizado = localStorage.getItem("foro4Realizado") === "1";
+
+    if(!realizado) return;
+
+    const links = document.querySelectorAll('a[href="4Foro.html"]');
+
+    links.forEach(link=>{
+
+        let estado = link.parentElement.querySelector("span");
+
+        if(!estado){
+            estado = link.nextElementSibling;
+        }
+
+        // bloquear enlace
+        link.style.pointerEvents = "none";
+        link.style.opacity = "0.4";
+        link.classList.add("bloqueado");
+
+        // mostrar realizado en rojo con visto
+        if(estado){
+            estado.innerHTML = "Realizado &#10004;";
+            estado.style.color = "red";
+            estado.style.fontWeight = "bold";
+        }
+
+    });
+
+}
+
+window.addEventListener("load", verificarForo4);
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("logoutBtn").addEventListener("click", function () {
+
+    /* 1. Eliminar datos guardados (si usas localStorage o sessionStorage) */
+    localStorage.clear();
+    sessionStorage.clear();
+
+    /* 2. Bloquear todos los enlaces, botones y selects */
+    const elementos = document.querySelectorAll(
+        "a, button, select, textarea, input"
+    );
+
+    elementos.forEach(el => {
+        if (el.id !== "logoutBtn") {
+            el.classList.add("bloqueado");
+            el.disabled = true;
+        }
+    });
+
+    /* 3. Ocultar todos los contenidos de temas, actividades y evaluaciones */
+    const contenidos = document.querySelectorAll(
+        "[id^='foroContent'], [id^='foroContent2'], [id^='foroContent3'], [id^='foroContent4'], [id^='foroContent5'], [id^='foroContent6'], [id^='foroContent7'], [id^='foroContent8'], [id^='foroContent9'], [id^='foroContent10']"
+    );
+
+    contenidos.forEach(c => c.style.display = "none");
+
+    /* 4. Resetear estados visuales (check, completado, activado) */
+    document.querySelectorAll(".activado, .completado")
+        .forEach(e => e.classList.remove("activado", "completado"));
+
+    /* 5. Volver a la pantalla inicial */
+    document.getElementById("startScreen").style.display = "flex";
+    document.getElementById("header").style.display = "none";
+
+});
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

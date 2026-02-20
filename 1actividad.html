@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego de Buscar Pares</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f1f1f1;
+        padding: 20px;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    #timer {
+        font-size: 20px;
+        margin: 10px 0;
+        font-weight: bold;
+        color: #d32f2f;
+    }
+
+    #startBtn {
+        padding: 12px 22px;
+        background: #1976d2;
+        color: #fff;
+        border: none;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    #startBtn:hover {
+        background: #0d47a1;
+    }
+
+    #game-board {
+        width: 600px;
+        margin: 25px auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 15px;
+        visibility: hidden;
+    }
+
+    .card {
+        width: 100%;
+        height: 130px;
+        background: #1e88e5;
+        border-radius: 12px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        transition: transform 0.3s;
+        user-select: none;
+    }
+
+    .card img {
+        width: 100%;
+        height: 100%;
+        display: none;
+    }
+
+    .card.flipped {
+        background: #ffffff;
+        transform: rotateY(180deg);
+    }
+
+    .card.flipped img {
+        display: block;
+    }
+
+    .card.matched {
+        background: #4caf50 !important;
+        cursor: default;
+    }
+
+    #mensaje {
+        font-size: 22px;
+        margin-top: 20px;
+        white-space: pre-line;
+    }
+
+    /* Botón final */
+    #finalBtn {
+        display: none;
+        margin-top: 25px;
+        padding: 12px 25px;
+        font-size: 18px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    #finalBtn:hover {
+        background: #388e3c;
+    }
+	
+	
+	/* ====== RESPONSIVE ====== */
+
+/* Tablets */
+@media (max-width: 768px) {
+    #game-board {
+        width: 100%;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .card {
+        height: 100px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+    #game-board {
+        width: 100%;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .card {
+        height: 90px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    #timer {
+        font-size: 18px;
+    }
+}
+
+	
+	
+	
+	
+	
+	
+</style>
+</head>
+<body>
+
+<h1>🎮 Juego: Buscar Pares</h1>
+
+<div id="timer">Tiempo: 3:00</div>
+
+<button id="startBtn">Iniciar Juego</button>
+
+<div id="game-board"></div>
+
+<p id="mensaje"></p>
+
+<!-- Botón final -->
+<!-- Botón final -->
+<button id="finalBtn" onclick="finalizarActividad()"   >Continuar</button>
+
+<script>
+    const board = document.getElementById("game-board");
+    const mensaje = document.getElementById("mensaje");
+    const timerDisplay = document.getElementById("timer");
+    const startBtn = document.getElementById("startBtn");
+    const finalBtn = document.getElementById("finalBtn");
+
+    let timeLeft = 180;
+    let timerInterval;
+    let lockBoard = false;
+    let firstCard = null;
+    let secondCard = null;
+    let matches = 0;
+
+    let images = [
+        "images/bacteria1.png","images/bacteria2.png",
+		"images/levadura1.png","images/levadura2.png",
+        "images/protozoo1.png","images/protozoo2.png",
+        "images/rana1.png","images/rana2.png",
+        "images/pupa1.png","images/pupa2.png",
+        "images/fototro1.png","images/fototro2.png",
+        "images/reproduccion1.png","images/reproduccion2.png",
+        "images/adapta1.png","images/adapta2.png"
+    ];
+
+    startBtn.addEventListener("click", iniciarJuego);
+
+    function iniciarJuego() {
+        mensaje.textContent = "";
+        finalBtn.style.display = "none";
+        board.innerHTML = "";
+        board.style.visibility = "visible";
+        startBtn.style.display = "none";
+
+        matches = 0;
+        timeLeft = 300;
+
+        images = images.sort(() => Math.random() - 0.5);
+
+        images.forEach((imgSrc) => {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.dataset.image = imgSrc;
+
+            const img = document.createElement("img");
+            img.src = imgSrc;
+            card.appendChild(img);
+
+            card.addEventListener("click", flipCard);
+            board.appendChild(card);
+        });
+
+        startTimer();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+
+            timerDisplay.textContent = `Tiempo: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                bloquearJuego();
+
+                let puntos = calcularPuntuacion();
+                mensaje.textContent = `⏳ Tiempo agotado 😢\nTu puntuación: ⭐ ${puntos}/10 ⭐`;
+
+                finalBtn.style.display = "inline-block";
+            }
+        }, 1000);
+    }
+
+    function bloquearJuego() {
+        const cards = document.querySelectorAll(".card");
+        cards.forEach(card => card.style.pointerEvents = "none");
+    }
+
+    function flipCard() {
+        if (lockBoard || this.classList.contains("flipped") || timeLeft <= 0) return;
+
+        this.classList.add("flipped");
+
+        if (!firstCard) {
+            firstCard = this;
+            return;
+        }
+
+        secondCard = this;
+        lockBoard = true;
+
+        setTimeout(checkMatch, 600);
+    }
+
+    function getBaseName(path) {
+        return path.replace(/\d+/g, "").replace(".png", "");
+    }
+
+    function checkMatch() {
+        const img1 = getBaseName(firstCard.dataset.image);
+        const img2 = getBaseName(secondCard.dataset.image);
+
+        if (img1 === img2) {
+            firstCard.classList.add("matched");
+            secondCard.classList.add("matched");
+            matches++;
+
+            if (matches === images.length / 2) {
+                clearInterval(timerInterval);
+
+                let puntos = calcularPuntuacion();
+                mensaje.textContent = `🎉 ¡Felicidades! Completaste todos los pares.\nTu puntuación final: ⭐ ${puntos}/10 ⭐`;
+
+                finalBtn.style.display = "inline-block";
+            }
+        } else {
+            firstCard.classList.remove("flipped");
+            secondCard.classList.remove("flipped");
+        }
+
+        firstCard = null;
+        secondCard = null;
+        lockBoard = false;
+    }
+
+    /* ⭐ SISTEMA DE PUNTUACIÓN EXACTO ⭐ */
+    function calcularPuntuacion() {
+        let puntos = matches * 1.25;
+        if (puntos > 10) puntos = 10;
+        return puntos.toFixed(2);
+    }
+	
+	
+	function finalizarActividad() {
+    localStorage.setItem("actividad1Realizado", "1");
+    localStorage.setItem("actividad1", "0");
+	// Calcular y guardar puntaje
+    let puntaje = calcularPuntuacion();
+    localStorage.setItem("actividad1Puntos", puntaje);
+	localStorage.setItem("evaluacion1", "1");
+	location.href = "index.html";
+}
+	
+
+function desbloquear(){
+    localStorage.setItem("evaluacion1", "0");
+    
+}
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
