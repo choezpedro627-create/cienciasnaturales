@@ -1537,12 +1537,12 @@ function aplicarBloqueos(){
         if(desbloqueado){
             el.classList.remove("bloqueado");
             el.classList.add("desbloqueado");
-            el.querySelector(".candado").textContent = "ð";
+            el.querySelector(".candado").textContent = "&#128275;";
             el.style.pointerEvents = "auto";
             el.style.opacity = "1";
         }else{
             el.classList.add("bloqueado");
-            el.querySelector(".candado").textContent = "ð";
+            el.querySelector(".candado").textContent = "&#128274;";
             el.style.pointerEvents = "none";
         }
     });
